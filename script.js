@@ -1,9 +1,8 @@
 $(function () {
-  $(".create-pet").click(addPet);
-
   // open modal
   $("#adoptButton").on("click", function () {
     $("#myModal").fadeIn(200);
+    addPet();
   });
 
   // close modal (X button)
@@ -12,6 +11,26 @@ $(function () {
     $("#modalInnerContent").empty();
   });
 });
+
+let notifyTimeout; // global timeout variable for notification
+
+function showNotification(message) {
+  const notify = $("#notify");
+
+  // Update text
+  notify.text(message);
+
+  // Slide down instantly
+  notify.css({ top: "20px", opacity: 1 });
+
+  // Reset previous timeout if running
+  clearTimeout(notifyTimeout);
+
+  // Start new timeout
+  notifyTimeout = setTimeout(() => {
+    notify.css({ top: "-60px", opacity: 0 });
+  }, 1000);
+}
 
 function Pet(petName) {
   this.name = petName;
@@ -29,6 +48,8 @@ function Pet(petName) {
     this.hunger -= 3;
     // Increase pet energy
     this.energy += 1;
+    // notification
+    showNotification(`You gave a treat to ${this.name}`);
   };
 
   this.clickedPlayButton = function () {
@@ -40,6 +61,8 @@ function Pet(petName) {
     this.hunger += 1;
     // Decrease pet energy
     this.energy -= 1;
+    // notification
+    showNotification(`You played with ${this.name}`);
   };
 
   this.clickedExerciseButton = function () {
@@ -51,6 +74,8 @@ function Pet(petName) {
     this.hunger += 2;
     // Decrease pet energy
     this.energy -= 2;
+    // notification
+    showNotification(`You exercised with ${this.name}`);
   };
 
   this.clickedSleepButton = function () {
@@ -58,6 +83,8 @@ function Pet(petName) {
     this.happiness += 1;
     // Increase pet energy
     this.energy += 3;
+    // notification
+    showNotification(`You put ${this.name} to bed`);
   };
 
   this.checkWeightAndHappinessBeforeUpdating = function () {
@@ -117,12 +144,12 @@ function renderPetCard(pet, petType) {
           <strong><span class="happiness">${pet.happiness}</span> tail wags (per min)</strong>
         </div>
         <div>
-          Hunger:
-          <strong><span class="hunger">${pet.hunger}</span> Level</strong>
+          Hunger Level:
+          <strong><span class="hunger">${pet.hunger}</span></strong>
         </div>
         <div>
-          Energy:
-          <strong><span class="energy">${pet.energy}</span> Level</strong>
+          Energy Level:
+          <strong><span class="energy">${pet.energy}</span></strong>
         </div>
         <div class="button-container">
           <button class="treat-button">Treat</button>
@@ -189,7 +216,7 @@ function renderPetCard(pet, petType) {
 
 function addPet() {
   var petName = null;
-  var petType = "dog";
+  var petType = null;
 
   const adoptionForm = $(`
     <form id="adoptionForm">
@@ -236,8 +263,18 @@ function addPet() {
     petType = "duck";
   });
 
-  adoptionForm.on("submit", function () {
+  adoptionForm.on("submit", function (event) {
     petName = $("#name").val();
+
+    // Create objects so we can validate via isEmptyObject
+    const typeCheck = petType ? { value: petType } : {};
+
+    // Validate petType
+    if ($.isEmptyObject(typeCheck)) {
+      event.preventDefault();
+      showNotification("Pet type not selected");
+      return;
+    }
 
     let pet = new Pet(petName);
     pet.startStatDecay();
