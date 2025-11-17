@@ -65,7 +65,7 @@ footer a {
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 400px;
+  height: 500px;
   background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
@@ -120,6 +120,7 @@ footer a {
 .button-container button {
   width: 100px;
   margin-right: 10px;
+  margin-bottom: 5px;
   text-align: center;
   display: inline-block;
   font-size: 15px;
@@ -167,7 +168,7 @@ footer a {
   display: inline-block;
 }
 
-#pet-button {
+.pet-button {
   height: 150px;
   width: 150px;
   margin: 5px;
