@@ -23,6 +23,7 @@ header {
 h1 {
   font-weight: bold;
   color: #000;
+  text-align: center;
 }
 
 .bold {
@@ -60,6 +61,7 @@ footer a {
   justify-content: center;
 }
 
+/* container that holds notification message */
 #notify {
   position: fixed;
   top: -60px; /* Hidden above screen */
@@ -93,6 +95,7 @@ footer a {
     box-shadow 0.2s;
 }
 
+/* Adoption button at the bottom of the screen */
 .create-pet {
   width: 300px;
   margin: 20px auto;
@@ -172,23 +175,26 @@ footer a {
   box-shadow: 0 0 10px #00000055;
 }
 
-/* Close Button */
+/* Close Button in the modal */
 .close {
   float: right;
   font-size: 28px;
   cursor: pointer;
 }
 
+/* Container to hold pet options buttons */
 .pet-chocies {
   display: inline-block;
 }
 
+/* pet option buttons */
 .pet-button {
   height: 150px;
   width: 150px;
   margin: 5px;
 }
 
+/* name entry in adoption form */
 .form-name {
   margin: 5px auto;
   display: flex;

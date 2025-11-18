@@ -14,6 +14,7 @@ $(function () {
 
 let notifyTimeout; // global timeout variable for notification
 
+// Function to show a notification at top of screen
 function showNotification(message) {
   const notify = $("#notify");
 
@@ -32,6 +33,7 @@ function showNotification(message) {
   }, 1000);
 }
 
+// Pet Object with constructor
 function Pet(petName) {
   this.name = petName;
   this.weight = 25;
@@ -39,6 +41,7 @@ function Pet(petName) {
   this.hunger = 0;
   this.energy = 10;
 
+  // function to change values when treat button is clicked
   this.clickedTreatButton = function () {
     // Increase pet happiness
     this.happiness += 1;
@@ -52,6 +55,7 @@ function Pet(petName) {
     showNotification(`You gave a treat to ${this.name}`);
   };
 
+  // function to change values when play button is clicked
   this.clickedPlayButton = function () {
     // Increase pet happiness
     this.happiness += 1;
@@ -65,6 +69,7 @@ function Pet(petName) {
     showNotification(`You played with ${this.name}`);
   };
 
+  // function to change values when exercise button is clicked
   this.clickedExerciseButton = function () {
     // Decrease pet happiness
     this.happiness -= 5;
@@ -78,6 +83,7 @@ function Pet(petName) {
     showNotification(`You exercised with ${this.name}`);
   };
 
+  // function to change values when sleep button is clicked
   this.clickedSleepButton = function () {
     // Increase pet happiness'
     this.happiness += 1;
@@ -87,6 +93,7 @@ function Pet(petName) {
     showNotification(`You put ${this.name} to bed`);
   };
 
+  // function to make sure values don't go below 0 and for energy and hunger not to exceed 10
   this.checkWeightAndHappinessBeforeUpdating = function () {
     if (this.weight < 0) {
       this.weight = 0;
@@ -109,6 +116,7 @@ function Pet(petName) {
     }
   };
 
+  // function to start the decay health of pet
   this.startStatDecay = function () {
     // Hunger drop every 5 seconds
     setInterval(() => {
@@ -122,6 +130,7 @@ function Pet(petName) {
   };
 }
 
+// Function to render the pet as a card in index.html
 function renderPetCard(pet, petType) {
   // HTMl for each pet card
   const card = $(`
@@ -161,7 +170,7 @@ function renderPetCard(pet, petType) {
     </div>
   `);
 
-  // Adds the pet object to the #pets section in the html
+  // Adds the pet object to the #pets section in the index.html
   $("#pets").append(card);
 
   // Updates values every 5 seconds to match stats decay in pets object
@@ -218,6 +227,7 @@ function addPet() {
   var petName = null;
   var petType = null;
 
+  // Adds the adoption form to modal object in the index.html
   const adoptionForm = $(`
     <form id="adoptionForm">
       <h2>Adoption Form</h2>
@@ -245,24 +255,30 @@ function addPet() {
     </form>
   `);
 
+  // Adds the adoption form to the #modalInnerContent section in the index.html
   $("#modalInnerContent").append(adoptionForm);
 
+  // changes pet type to cat when cat button is pressed
   adoptionForm.find("#cat").on("click", function () {
     petType = "cat";
   });
 
+  // changes pet type to dog when dog button is pressed
   adoptionForm.find("#dog").on("click", function () {
     petType = "dog";
   });
 
+  // changes pet type to horse when horse button is pressed
   adoptionForm.find("#horse").on("click", function () {
     petType = "horse";
   });
 
+  // changes pet type to duck when duck button is pressed
   adoptionForm.find("#duck").on("click", function () {
     petType = "duck";
   });
 
+  // when adopt pet button is clicked pet adoption form is shown
   adoptionForm.on("submit", function (event) {
     petName = $("#name").val();
 
@@ -270,12 +286,15 @@ function addPet() {
     const typeCheck = petType ? { value: petType } : {};
 
     // Validate petType
+    // The jQuery.isEmptyObject() Checks to see if an object is empty (contains no enumerable properties) and returns true if object is empty and false if object is not empty.
     if ($.isEmptyObject(typeCheck)) {
+      // The event.preventDefault() is a method so that the default action of the event will not be triggered.
       event.preventDefault();
       showNotification("Pet type not selected");
       return;
     }
 
+    // maked a pet object, starts the health decay, and renders pet card to index.html
     let pet = new Pet(petName);
     pet.startStatDecay();
     renderPetCard(pet, petType);
